@@ -1,0 +1,4 @@
+{
+  "dbUri": "mongodb://localhost/react_chat",
+  "jwtSecret": "react chat is awesome!"
+}

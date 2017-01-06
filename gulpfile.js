@@ -12,19 +12,16 @@ var autoprefixer = require('gulp-autoprefixer');
 var source = require('vinyl-source-stream');
 
 var dependencies = [
-    'react',
-    'react-dom',
-    'react-router',
     'underscore'
 ];
 
 gulp.task('browserify', ['browserify-vendor'], function() {
-    return browserify({ entries: 'app/public/js/app.js', debug: true })
+    return browserify({ entries: 'client/public/js/app.js', debug: true })
         .external(dependencies)
         .transform(babelify, { presets: ['es2015', 'react'] })
         .bundle()
         .pipe(source('bundle.js'))
-        .pipe(gulp.dest('app/public/dist'));
+        .pipe(gulp.dest('client/public/dist'));
 });
 
 gulp.task('browserify-vendor', function() {
@@ -32,29 +29,29 @@ gulp.task('browserify-vendor', function() {
         .require(dependencies)
         .bundle()
         .pipe(source('vendor.bundle.js'))
-        .pipe(gulp.dest('app/public/dist'));
+        .pipe(gulp.dest('client/public/dist'));
 });
 
 gulp.task('styles', function() {
-    return gulp.src(['app/public/styles/styles.less'])
+    return gulp.src(['client/public/styles/styles.less'])
         .pipe(concat('styles.less'))
         .pipe(plumber())
         .pipe(less())
         .pipe(autoprefixer())
-        .pipe(gulp.dest('app/public/dist/styles'));
+        .pipe(gulp.dest('client/public/dist/styles'));
 });
 
 gulp.task('watch', function() {
-    gulp.watch('app/public/styles/*.less', ['styles']);
+    gulp.watch('client/public/styles/*.less', ['styles']);
 });
 
 gulp.task('images', function() {
-    return gulp.src('app/public/img/**/*.*')
-        .pipe(gulp.dest('app/public/dist/img'));
+    return gulp.src('client/public/img/**/*.*')
+        .pipe(gulp.dest('client/public/dist/img'));
 });
 
 gulp.task('browserify-watch', ['browserify-vendor'], function() {
-    var bundler = watchify(browserify({ entries: 'app/public/js/app.js', debug: true }, watchify.args));
+    var bundler = watchify(browserify({ entries: 'client/public/js/app.js', debug: true }, watchify.args));
     bundler.external(dependencies);
     bundler.transform(babelify, { presets: ['es2015', 'react'] });
     bundler.on('update', rebundle);
@@ -63,7 +60,7 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
     function rebundle() {
         return bundler.bundle()
             .pipe(source('bundle.js'))
-            .pipe(gulp.dest('app/public/dist'));
+            .pipe(gulp.dest('client/public/dist'));
     }
 });
 
@@ -71,7 +68,7 @@ gulp.task('vendor', function() {
     return gulp.src([
         'node_modules/jquery/dist/jquery.js'
     ]).pipe(concat('vendor.js'))
-        .pipe(gulp.dest('app/public/dist'));
+        .pipe(gulp.dest('client/public/dist'));
 });
 
 
